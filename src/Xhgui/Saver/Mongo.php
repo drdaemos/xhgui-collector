@@ -17,8 +17,21 @@ class Xhgui_Saver_Mongo implements Xhgui_Saver_Interface
         $this->_collection = $collection;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return array|bool
+     * @throws MongoCursorException
+     * @throws MongoCursorTimeoutException
+     * @throws MongoException
+     * @throws Exception
+     */
     public function save(array $data)
     {
+        if (!class_exists('MongoDate')) {
+            throw new \Exception(get_called_class() . ' requires alcaeus/mongo-php-adapter to be installed');
+        }
+
         if (!isset($data['_id'])) {
             $data['_id'] = self::getLastProfilingId();
         }
